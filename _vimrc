@@ -1,6 +1,9 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+"================================================================================
+" Vundle setup
+"================================================================================
 " set the runtime path to include Vundle and initialize
 set rtp+=~/vimfiles/bundle/Vundle.vim/
 let path='~/vimfiles/bundle'
@@ -35,6 +38,11 @@ Plugin 'itchyny/lightline.vim'
 "Plugin 'easytags'
 "Plugin 'repeat'
 "Plugin 'shell'
+"Plugin 'tpope/vim-fugitive'
+"Plugin 'Shougo/unite.vim'
+"Plugin 'mileszs/ack.vim'
+"Plugin 'scrooloose/syntastic'
+"Plugin 'gtags.vim'
  
 
 " >> for easytags and undo-tree
@@ -129,6 +137,31 @@ autocmd Filetype c,cpp,verilog nnoremap <F5> :TagbarToggle<CR>
 let g:ctrlspace_default_mapping_key = "<tab>"
 let g:ctrlspace_unicode_font = 0
 
+"-------------------- gtags-cscope
+set csprg=$VIM\glo631wb\bin\GTAGS-cscope
+set cscopequickfix=s-,c-,d-,i-,t-,e-
+nnoremap <leader>ga :silent !gtags<CR>:cs add GTAGS<CR>
+"nnoremap <c-]> :execute 'cstag '.expand('<cword>')<CR>
+nnoremap <leader>gg :execute 'cscope find g '.expand('<cword>')<CR>
+nnoremap <leader>gs :execute 'cscope find s '.expand('<cword>')<CR>
+nnoremap <leader>gc :execute 'cscope find c '.expand('<cword>')<CR>
+nnoremap <leader>gt :execute 'cscope find t '.expand('<cword>')<CR>
+nnoremap <leader>gf :execute 'cscope find f '.expand('<cword>')<CR>
+nnoremap <leader>gi :execute 'cscope find i '.expand('<cword>')<CR>
+vnoremap <leader>gg <ESC>:execute 'cscope find g '.GetVisualSelection()<CR>
+vnoremap <leader>gs <ESC>:execute 'cscope find s '.GetVisualSelection()<CR>
+vnoremap <leader>gc <ESC>:execute 'cscope find c '.GetVisualSelection()<CR>
+vnoremap <leader>gt <ESC>:execute 'cscope find t '.GetVisualSelection()<CR>
+vnoremap <leader>gf <ESC>:execute 'cscope find f '.GetVisualSelection()<CR>
+vnoremap <leader>gi <ESC>:execute 'cscope find i '.GetVisualSelection()<CR>
+function! GetVisualSelection()
+    let [s:lnum1, s:col1] = getpos("'<")[1:2]
+    let [s:lnum2, s:col2] = getpos("'>")[1:2]
+    let s:lines = getline(s:lnum1, s:lnum2)
+    let s:lines[-1] = s:lines[-1][: s:col2 - (&selection == 'inclusive' ? 1 : 2)]
+    let s:lines[0] = s:lines[0][s:col1 - 1:]
+    return join(s:lines, ' ')
+endfunction
 
 "================================================================================
 " environment setup
@@ -237,7 +270,9 @@ set hlsearch
 set incsearch
 set ignorecase
 set smartcase
-nmap <silent> <M-n> :silent :nohlsearch<CR>
+"nmap <silent> <M-n> :silent :nohlsearch<CR>
+let hlstate=0
+nnoremap <M-n> :if (hlstate == 0) \| nohlsearch \| else \| set hlsearch \| endif \| let hlstate=1-hlstate<cr>
 
 " >>>> scroll setting <<<<
 set sidescroll=1
