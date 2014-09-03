@@ -1,6 +1,12 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
+" >>>> Encoding setting <<<<
+set encoding=utf-8
+setglobal fileencoding=utf-8
+set fileencodings=utf-8,big5,gbk,latin1
+set termencoding=utf-8
+
 "================================================================================
 " Vundle setup
 "================================================================================
@@ -32,8 +38,9 @@ Plugin 'godlygeek/tabular'
 Plugin 'mbbill/undotree'
 Plugin 'sgeb/vim-matlab'
 Plugin 'itchyny/lightline.vim'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'easymotion'
+Plugin 'Raimondi/delimitMate'
+Plugin 'vim-scripts/vcscommand.vim'
+Plugin 'MattesGroeger/vim-bookmarks'
 "Plugin 'easymotion'
 "Plugin 'easytags'
 "Plugin 'repeat'
@@ -42,10 +49,19 @@ Plugin 'itchyny/lightline.vim'
 "Plugin 'Shougo/unite.vim'
 "Plugin 'mileszs/ack.vim'
 "Plugin 'scrooloose/syntastic'
-"Plugin 'gtags.vim'
+" user maintain
+Plugin 'Valloric/YouCompleteMe', {'pinned': 1}
+Plugin 'Gtags', {'pinned': 1}
  
 
-" >> for easytags and undo-tree
+"================================================================================
+" Plugin setup
+"================================================================================
+" >>>> keyboard setting <<<<
+" Change <Leader>
+let mapleader = ","
+
+" >>>> create .dotfile <<<<
 fun! CreateDotDir()
 	cd %:p:h
 	if !isdirectory('./.dotfiles') 
@@ -54,20 +70,20 @@ fun! CreateDotDir()
 	endif
 endfunc
 
-" >>----------------vim-bookmarks-master
-""let g:bookmark_auto_close = 1
-""nmap mm <Plug>BookmarkToggle
-""nmap ma <Plug>BookmarkAnnotate
-""nmap ms <Plug>BookmarkShowAll
-""nmap mp <Plug>BookmarkPrev
-""nmap mn <Plug>BookmarkNext
-""nmap mc <Plug>BookmarkClear
-""nmap mC <Plug>BookmarkClearAll
+" >>>> vim-bookmarks <<<<
+let g:bookmark_auto_close = 1
+nmap mm <Plug>BookmarkToggle
+nmap ma <Plug>BookmarkAnnotate
+nmap ms <Plug>BookmarkShowAll
+nmap m[ <Plug>BookmarkPrev
+nmap m] <Plug>BookmarkNext
+nmap mc <Plug>BookmarkClear
+nmap mC <Plug>BookmarkClearAll
 
-" >>----------------EasyGrep
+" >>>> EasyGrep <<<<
 let EasyGrepSearchCurrentBufferDir = 0
 
-" >>----------------easytags
+" >>>> easytags <<<<
 "let g:easytags_python_enabled = 1
 "let g:easytags_include_members = 1
 "let g:easytags_on_cursorhold = 0
@@ -84,7 +100,7 @@ let EasyGrepSearchCurrentBufferDir = 0
 "highlight ClassMember ctermfg=none guifg=#ffff88
 "highlight link cMember ClassMember
 
-" >>----------------undo tree
+" >>>> undo tree <<<<
 "if has("persistent_undo")
     "set undodir ='c:\\Documents\ and\ Settings\\902092'
     "set undofile
@@ -111,10 +127,10 @@ let g:undotree_TreeNodeShape = 'o'
 let g:undotree_WindowLayout = 'botright'
 nmap <F10> :UndotreeToggle<CR>
 
-" >>----------------easy motion
+" >>>> easy motion <<<<
 "let g:EasyMotion_leader_key='\'
 
-" >>----------------surround
+" >>>> surround <<<<
 imap s( <Plug>Isurround)
 imap s{ <Plug>Isurround}
 imap s[ <Plug>Isurround]
@@ -122,54 +138,53 @@ imap s< <Plug>Isurround>
 imap s" <Plug>Isurround"
 imap s' <Plug>Isurround'
 
-" >>----------------nerd-tree
+" >>>> nerd-tree <<<<
 let NERDTreeChDirMode=2
 nmap <F3> :NERDTreeToggle %:p:h<CR>
 
-" >>----------------YouCompleteMe
+" >>>> YouCompleteMe <<<<
 let g:ycm_allow_changing_updatetime = 0
 
-" >>----------------tagbar
+" >>>> tagbar <<<<
 let g:tagbar_width = 30
 autocmd Filetype c,cpp,verilog nnoremap <F5> :TagbarToggle<CR>
 
-" >>----------------ctrlspace
+" >>>> ctrlspace <<<<
 let g:ctrlspace_default_mapping_key = "<tab>"
-let g:ctrlspace_unicode_font = 0
+let g:ctrlspace_unicode_font = 1
 
-"-------------------- gtags-cscope
-set csprg=$VIM\glo631wb\bin\GTAGS-cscope
+" >>>> gtags-cscope <<<<
 set cscopequickfix=s-,c-,d-,i-,t-,e-
-nnoremap <leader>ga :silent !gtags<CR>:cs add GTAGS<CR>
-"nnoremap <c-]> :execute 'cstag '.expand('<cword>')<CR>
-nnoremap <leader>gg :execute 'cscope find g '.expand('<cword>')<CR>
-nnoremap <leader>gs :execute 'cscope find s '.expand('<cword>')<CR>
-nnoremap <leader>gc :execute 'cscope find c '.expand('<cword>')<CR>
-nnoremap <leader>gt :execute 'cscope find t '.expand('<cword>')<CR>
-nnoremap <leader>gf :execute 'cscope find f '.expand('<cword>')<CR>
-nnoremap <leader>gi :execute 'cscope find i '.expand('<cword>')<CR>
-vnoremap <leader>gg <ESC>:execute 'cscope find g '.GetVisualSelection()<CR>
-vnoremap <leader>gs <ESC>:execute 'cscope find s '.GetVisualSelection()<CR>
-vnoremap <leader>gc <ESC>:execute 'cscope find c '.GetVisualSelection()<CR>
-vnoremap <leader>gt <ESC>:execute 'cscope find t '.GetVisualSelection()<CR>
-vnoremap <leader>gf <ESC>:execute 'cscope find f '.GetVisualSelection()<CR>
-vnoremap <leader>gi <ESC>:execute 'cscope find i '.GetVisualSelection()<CR>
-function! GetVisualSelection()
+set cscopetag
+let g:GtagsCscope_Auto_Map = 1
+if g:GtagsCscope_Auto_Map == 0
+  "nnoremap <C-\>a :silent !gtags<CR>:cs add GTAGS<CR>
+  "set csprg=$VIM\glo631wb\bin\GTAGS-cscope
+  nnoremap <leader>gg :execute 'cscope find g '.expand('<cword>')<CR>
+  nnoremap <leader>gs :execute 'cscope find s '.expand('<cword>')<CR>
+  nnoremap <leader>gc :execute 'cscope find c '.expand('<cword>')<CR>
+  nnoremap <leader>gt :execute 'cscope find t '.expand('<cword>')<CR>
+  nnoremap <leader>gf :execute 'cscope find f '.expand('<cword>')<CR>
+  nnoremap <leader>gi :execute 'cscope find i '.expand('<cword>')<CR>
+  vnoremap <leader>gg <ESC>:execute 'cscope find g '.GetVisualSelection()<CR>
+  vnoremap <leader>gs <ESC>:execute 'cscope find s '.GetVisualSelection()<CR>
+  vnoremap <leader>gc <ESC>:execute 'cscope find c '.GetVisualSelection()<CR>
+  vnoremap <leader>gt <ESC>:execute 'cscope find t '.GetVisualSelection()<CR>
+  vnoremap <leader>gf <ESC>:execute 'cscope find f '.GetVisualSelection()<CR>
+  vnoremap <leader>gi <ESC>:execute 'cscope find i '.GetVisualSelection()<CR>
+  function! GetVisualSelection()
     let [s:lnum1, s:col1] = getpos("'<")[1:2]
     let [s:lnum2, s:col2] = getpos("'>")[1:2]
     let s:lines = getline(s:lnum1, s:lnum2)
     let s:lines[-1] = s:lines[-1][: s:col2 - (&selection == 'inclusive' ? 1 : 2)]
     let s:lines[0] = s:lines[0][s:col1 - 1:]
     return join(s:lines, ' ')
-endfunction
+  endfunction
+endif
 
 "================================================================================
-" environment setup
+" Environment setup
 "================================================================================
-" >>>> keyboard setting <<<<
-" Change <Leader>
-let mapleader = ","
-
 " Quick timeouts on key combinations.
 set timeoutlen=300
 
@@ -218,12 +233,6 @@ set tabpagemax=100
 set guioptions-=e
 "set guitablabel=%N.\ %t
 
-" >>>> Encoding setting <<<<
-"set encoding=utf-8,cp950
-set fileencoding=utf-8
-set fileencodings=utf-8,big5,gbk,latin1
-set termencoding=utf-8
-
 " >>>> Backup setting <<<<
 set nobackup
 " Auto-backup files and .swp files don't go to pwd
@@ -261,7 +270,7 @@ set matchtime=0
 " >>>> Indent setting <<<<
 command IndentSpace2 set tabstop=2 softtabstop=0 shiftwidth=2 expandtab fdm=marker fdo-=search formatoptions+=j textwidth=110 "autoindent
 command IndentTab4 set tabstop=4 softtabstop=0 shiftwidth=4 noexpandtab fdm=marker fdo-=search formatoptions+=j textwidth=110 "autoindent
-autocmd! BufEnter * IndentSpace2
+autocmd! Filetype cpp,c,verilog IndentSpace2
 set listchars=tab:>-,trail:.,eol:$
 nmap <silent> <leader>s :set nolist!<CR>
 
@@ -272,7 +281,7 @@ set ignorecase
 set smartcase
 "nmap <silent> <M-n> :silent :nohlsearch<CR>
 let hlstate=0
-nnoremap <M-n> :if (hlstate == 0) \| nohlsearch \| else \| set hlsearch \| endif \| let hlstate=1-hlstate<cr>
+nnoremap <M-n> :silent :if (hlstate == 0) \| nohlsearch \| else \| set hlsearch \| endif \| let hlstate=1-hlstate<cr>
 
 " >>>> scroll setting <<<<
 set sidescroll=1
