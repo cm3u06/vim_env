@@ -2,56 +2,51 @@ set nocompatible              " be iMproved, required
 filetype off                  " required
 
 " >>>> Encoding setting <<<<
-set encoding=utf-8
-setglobal fileencoding=utf-8
-set fileencodings=utf-8,big5,gbk,latin1
-set termencoding=utf-8
+"set encoding=utf-8
+"setglobal fileencoding=utf-8
+"set fileencodings=utf-8,big5,gbk,latin1
+"set termencoding=utf-8
 
 "================================================================================
 " Vundle setup
 "================================================================================
 " set the runtime path to include Vundle and initialize
-set rtp+=~/vimfiles/bundle/Vundle.vim/
-let path='~/vimfiles/bundle'
+set rtp+=D:\Vim\vimfiles\bundle\Vundle.vim\
+let path='D:\Vim\vimfiles\bundle'
 call vundle#begin(path)
 " alternatively, pass a path where Vundle should install plugins
 "call vundle#begin('~/some/path/here')
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
+Plugin 'VundleVim/Vundle.vim'
 
 " Keep Plugin commands between vundle#begin/end.
 "Plugin 'tpope/vim-fugitive'
 
 call vundle#end()
 filetype plugin indent on    " required
-Plugin 'szw/vim-ctrlspace'
+"Plugin 'szw/vim-ctrlspace'
 Plugin 'vim-scripts/EasyGrep'
-Plugin 'nanotech/jellybeans.vim'
-Plugin 'matchit.zip'
+Plugin 'andymass/vim-matchup'
 Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-surround'
-Plugin 'Kocha/vim-systemc'
-Plugin 'majutsushi/tagbar'
-Plugin 'godlygeek/tabular'
 Plugin 'mbbill/undotree'
-Plugin 'sgeb/vim-matlab'
 Plugin 'itchyny/lightline.vim'
 Plugin 'Raimondi/delimitMate'
 Plugin 'vim-scripts/vcscommand.vim'
-Plugin 'MattesGroeger/vim-bookmarks'
-"Plugin 'easymotion'
-"Plugin 'easytags'
-"Plugin 'repeat'
-"Plugin 'shell'
-"Plugin 'tpope/vim-fugitive'
-"Plugin 'Shougo/unite.vim'
-"Plugin 'mileszs/ack.vim'
-"Plugin 'scrooloose/syntastic'
-" user maintain
-Plugin 'Valloric/YouCompleteMe', {'pinned': 1}
-Plugin 'Gtags', {'pinned': 1}
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'ervandew/supertab'
+Plugin 'junegunn/vim-easy-align'
+Plugin 'cjrh/vim-conda'
+"Plugin 'davidhalter/jedi-vim'
+Plugin 'sirver/ultisnips'
+Plugin 'honza/vim-snippets'
+"Plugin 'kana/vim-textobj-user'
+Plugin 'michaeljsmith/vim-indent-object'
+
+
+
  
 
 "================================================================================
@@ -71,14 +66,14 @@ fun! CreateDotDir()
 endfunc
 
 " >>>> vim-bookmarks <<<<
-let g:bookmark_auto_close = 1
-nmap mm <Plug>BookmarkToggle
-nmap ma <Plug>BookmarkAnnotate
-nmap ms <Plug>BookmarkShowAll
-nmap m[ <Plug>BookmarkPrev
-nmap m] <Plug>BookmarkNext
-nmap mc <Plug>BookmarkClear
-nmap mC <Plug>BookmarkClearAll
+"let g:bookmark_auto_close = 1
+"nmap mm <Plug>BookmarkToggle
+"nmap ma <Plug>BookmarkAnnotate
+"nmap ms <Plug>BookmarkShowAll
+"nmap m[ <Plug>BookmarkPrev
+"nmap m] <Plug>BookmarkNext
+"nmap mc <Plug>BookmarkClear
+"nmap mC <Plug>BookmarkClearAll
 
 " >>>> EasyGrep <<<<
 let EasyGrepSearchCurrentBufferDir = 0
@@ -131,56 +126,65 @@ nmap <F10> :UndotreeToggle<CR>
 "let g:EasyMotion_leader_key='\'
 
 " >>>> surround <<<<
-imap s( <Plug>Isurround)
-imap s{ <Plug>Isurround}
-imap s[ <Plug>Isurround]
-imap s< <Plug>Isurround>
-imap s" <Plug>Isurround"
-imap s' <Plug>Isurround'
+"imap s( <Plug>Isurround)
+"imap s{ <Plug>Isurround}
+"imap s[ <Plug>Isurround]
+"imap s< <Plug>Isurround>
+"imap s" <Plug>Isurround"
+"imap s' <Plug>Isurround'
 
 " >>>> nerd-tree <<<<
 let NERDTreeChDirMode=2
 nmap <F3> :NERDTreeToggle %:p:h<CR>
 
 " >>>> YouCompleteMe <<<<
-let g:ycm_allow_changing_updatetime = 0
+"let g:ycm_allow_changing_updatetime = 0
 
 " >>>> tagbar <<<<
-let g:tagbar_width = 30
-autocmd Filetype c,cpp,verilog nnoremap <F5> :TagbarToggle<CR>
+"let g:tagbar_width = 30
+"autocmd Filetype c,cpp,verilog nnoremap <F5> :TagbarToggle<CR>
 
 " >>>> ctrlspace <<<<
-let g:ctrlspace_default_mapping_key = "<tab>"
-let g:ctrlspace_unicode_font = 1
+"let g:ctrlspace_default_mapping_key = "<tab>"
+"let g:ctrlspace_unicode_font = 1
 
 " >>>> gtags-cscope <<<<
-set cscopequickfix=s-,c-,d-,i-,t-,e-
-set cscopetag
-let g:GtagsCscope_Auto_Map = 1
-if g:GtagsCscope_Auto_Map == 0
-  "nnoremap <C-\>a :silent !gtags<CR>:cs add GTAGS<CR>
-  "set csprg=$VIM\glo631wb\bin\GTAGS-cscope
-  nnoremap <leader>gg :execute 'cscope find g '.expand('<cword>')<CR>
-  nnoremap <leader>gs :execute 'cscope find s '.expand('<cword>')<CR>
-  nnoremap <leader>gc :execute 'cscope find c '.expand('<cword>')<CR>
-  nnoremap <leader>gt :execute 'cscope find t '.expand('<cword>')<CR>
-  nnoremap <leader>gf :execute 'cscope find f '.expand('<cword>')<CR>
-  nnoremap <leader>gi :execute 'cscope find i '.expand('<cword>')<CR>
-  vnoremap <leader>gg <ESC>:execute 'cscope find g '.GetVisualSelection()<CR>
-  vnoremap <leader>gs <ESC>:execute 'cscope find s '.GetVisualSelection()<CR>
-  vnoremap <leader>gc <ESC>:execute 'cscope find c '.GetVisualSelection()<CR>
-  vnoremap <leader>gt <ESC>:execute 'cscope find t '.GetVisualSelection()<CR>
-  vnoremap <leader>gf <ESC>:execute 'cscope find f '.GetVisualSelection()<CR>
-  vnoremap <leader>gi <ESC>:execute 'cscope find i '.GetVisualSelection()<CR>
-  function! GetVisualSelection()
-    let [s:lnum1, s:col1] = getpos("'<")[1:2]
-    let [s:lnum2, s:col2] = getpos("'>")[1:2]
-    let s:lines = getline(s:lnum1, s:lnum2)
-    let s:lines[-1] = s:lines[-1][: s:col2 - (&selection == 'inclusive' ? 1 : 2)]
-    let s:lines[0] = s:lines[0][s:col1 - 1:]
-    return join(s:lines, ' ')
-  endfunction
-endif
+"set cscopequickfix=s-,c-,d-,i-,t-,e-
+"set cscopetag
+"let g:GtagsCscope_Auto_Map = 1
+"if g:GtagsCscope_Auto_Map == 0
+  ""nnoremap <C-\>a :silent !gtags<CR>:cs add GTAGS<CR>
+  ""set csprg=$VIM\glo631wb\bin\GTAGS-cscope
+  "nnoremap <leader>gg :execute 'cscope find g '.expand('<cword>')<CR>
+  "nnoremap <leader>gs :execute 'cscope find s '.expand('<cword>')<CR>
+  "nnoremap <leader>gc :execute 'cscope find c '.expand('<cword>')<CR>
+  "nnoremap <leader>gt :execute 'cscope find t '.expand('<cword>')<CR>
+  "nnoremap <leader>gf :execute 'cscope find f '.expand('<cword>')<CR>
+  "nnoremap <leader>gi :execute 'cscope find i '.expand('<cword>')<CR>
+  "vnoremap <leader>gg <ESC>:execute 'cscope find g '.GetVisualSelection()<CR>
+  "vnoremap <leader>gs <ESC>:execute 'cscope find s '.GetVisualSelection()<CR>
+  "vnoremap <leader>gc <ESC>:execute 'cscope find c '.GetVisualSelection()<CR>
+  "vnoremap <leader>gt <ESC>:execute 'cscope find t '.GetVisualSelection()<CR>
+  "vnoremap <leader>gf <ESC>:execute 'cscope find f '.GetVisualSelection()<CR>
+  "vnoremap <leader>gi <ESC>:execute 'cscope find i '.GetVisualSelection()<CR>
+  "function! GetVisualSelection()
+    "let [s:lnum1, s:col1] = getpos("'<")[1:2]
+    "let [s:lnum2, s:col2] = getpos("'>")[1:2]
+    "let s:lines = getline(s:lnum1, s:lnum2)
+    "let s:lines[-1] = s:lines[-1][: s:col2 - (&selection == 'inclusive' ? 1 : 2)]
+    "let s:lines[0] = s:lines[0][s:col1 - 1:]
+    "return join(s:lines, ' ')
+  "endfunction
+"endif
+
+
+
+" >>>> ultisnips <<<<
+let g:UltiSnipsUsePythonVersion = 3
+let g:UltiSnipsExpandTrigger          =    "<tab>"
+let g:UltiSnipsListSnippets           =    "<c-tab>"
+let g:UltiSnipsJumpForwardTrigger     =    "<tab>"
+let g:UltiSnipsJumpBackwardTrigger    =    "<s-tab>"
 
 "================================================================================
 " Environment setup
@@ -220,7 +224,7 @@ nnoremap Y y$
 " >>>> file setting <<<<
 set autoread			" auto read when file is changed from outside
 " auto reload vimrc when editing it
-autocmd! BufWritePost _vimrc source ~\_vimrc
+autocmd! BufWritePost _vimrc source D:\Vim\_vimrc
 
 " >>>> Buffer setting <<<<
 " cd to current working directory
@@ -245,7 +249,7 @@ set guifont=Consolas:h10
 set nowrap
 autocmd GUIEnter * simalt ~x
 "set cursorline
-colorscheme jellybeans
+colorscheme torte
 syntax on
 
 " >>>> Command-line setting <<<<
@@ -365,4 +369,5 @@ noremap <silent><C-S> :<C-U>call CalculateCursor(v:count1, "*")<CR>
 vnoremap <silent><C-S> :<C-U>'<,'>call CalculateCursor(v:count1, "*")<CR>:noh<CR>gv
 noremap <silent><C-C> :<C-U>call CalculateCursor(v:count1, "/")<CR>
 vnoremap <silent><C-C> :<C-U>'<,'>call CalculateCursor(v:count1, "/")<CR>:noh<CR>gv
+
 
