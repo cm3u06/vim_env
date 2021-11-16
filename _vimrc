@@ -1,51 +1,14 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-" >>>> Encoding setting <<<<
-"set encoding=utf-8
-"setglobal fileencoding=utf-8
-"set fileencodings=utf-8,big5,gbk,latin1
-"set termencoding=utf-8
 
 "================================================================================
-" Vundle setup
+" bundle setup
 "================================================================================
-" set the runtime path to include Vundle and initialize
-set rtp+=D:\Vim\vimfiles\bundle\Vundle.vim\
-let path='D:\Vim\vimfiles\bundle'
-call vundle#begin(path)
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" Keep Plugin commands between vundle#begin/end.
-"Plugin 'tpope/vim-fugitive'
-
-call vundle#end()
-filetype plugin indent on    " required
-"Plugin 'szw/vim-ctrlspace'
-Plugin 'vim-scripts/EasyGrep'
-Plugin 'andymass/vim-matchup'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-surround'
-Plugin 'mbbill/undotree'
-Plugin 'itchyny/lightline.vim'
-Plugin 'Raimondi/delimitMate'
-Plugin 'vim-scripts/vcscommand.vim'
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'ervandew/supertab'
-Plugin 'junegunn/vim-easy-align'
-Plugin 'cjrh/vim-conda'
-"Plugin 'davidhalter/jedi-vim'
-Plugin 'sirver/ultisnips'
-Plugin 'honza/vim-snippets'
-"Plugin 'kana/vim-textobj-user'
-Plugin 'michaeljsmith/vim-indent-object'
-
-
+runtime bundle/vim-pathogen/autoload/pathogen.vim
+execute pathogen#infect()
+"set pythonthreedll=$HOME/AppData/Local/Programs/Python/Python39/python39.dll
 
  
 
@@ -56,71 +19,41 @@ Plugin 'michaeljsmith/vim-indent-object'
 " Change <Leader>
 let mapleader = ","
 
-" >>>> create .dotfile <<<<
+" >>>> EasyGrep <<<<
+"let EasyGrepSearchCurrentBufferDir = 0
+
+" >>>> undo tree <<<<
 fun! CreateDotDir()
-	cd %:p:h
-	if !isdirectory('./.dotfiles') 
-		call mkdir('./.dotfiles') 
-		echo "create ./.dotfiles folder!"
+	if !isdirectory(expand('~/.undo_history')) 
+		call mkdir(expand('~/.undo_history')) 
+		echo "create ~/.undo_history folder!"
 	endif
 endfunc
 
-" >>>> vim-bookmarks <<<<
-"let g:bookmark_auto_close = 1
-"nmap mm <Plug>BookmarkToggle
-"nmap ma <Plug>BookmarkAnnotate
-"nmap ms <Plug>BookmarkShowAll
-"nmap m[ <Plug>BookmarkPrev
-"nmap m] <Plug>BookmarkNext
-"nmap mc <Plug>BookmarkClear
-"nmap mC <Plug>BookmarkClearAll
-
-" >>>> EasyGrep <<<<
-let EasyGrepSearchCurrentBufferDir = 0
-
-" >>>> easytags <<<<
-"let g:easytags_python_enabled = 1
-"let g:easytags_include_members = 1
-"let g:easytags_on_cursorhold = 0
-""let g:easytags_updatetime_min = 4000
-"if !exists("easytags_conf")
-"	let easytags_conf = 1
-"	autocmd Filetype c,cpp,verilog call CreateTags()
-"endif
-"func! CreateTags()
-"	call CreateDotDir()
-"	set tags =./.dotfiles/tags;
-"	let g:easytags_dynamic_files=2
-"endfunc
-"highlight ClassMember ctermfg=none guifg=#ffff88
-"highlight link cMember ClassMember
-
-" >>>> undo tree <<<<
-"if has("persistent_undo")
-    "set undodir ='c:\\Documents\ and\ Settings\\902092'
-    "set undofile
-"endif
 if !exists("undotree_conf")
 	let undotree_conf = 1
 	"autocmd FileType c,cpp,systemc,verilog call ReadUndo()
 	"autocmd FileType c,cpp,systemc,verilog call WriteUndo()
-	autocmd! BufReadPost *.h,*.c,*.cpp,*.v call ReadUndo()
-	autocmd! BufWritePre *.h,*.c,*.cpp,*.v call WriteUndo()
+	autocmd! BufReadPost *.h,*.c,*.cpp,*.v,*.sv,*.py call ReadUndo()
+	autocmd! BufWritePre *.h,*.c,*.cpp,*.v,*.sv,*.py call WriteUndo()
 endif
 func! ReadUndo()
-	if filereadable(expand('%:h'). '/.dotfiles/' . expand('%:t') . '.undo')
-		silent! rundo %:h/.dotfiles/%:t.undo
+	let undo_file = expand('~'). '/.undo_history/' . substitute(expand('%:p'),'/','_','g') . '.undo'
+	if filereadable(fnameescape(undo_file))
+		"echo undo_file
+		silent! execute 'rundo ' . fnameescape(undo_file)
 	endif
 endfunc
 func! WriteUndo()
+	let undo_file = expand('~'). '/.undo_history/' . substitute(expand('%:p'),'/','_','g') . '.undo'
 	call CreateDotDir()
-	silent! wundo %:h/.dotfiles/%:t.undo
+	silent! execute 'wundo ' . fnameescape(undo_file)
 endfunc
 " tree node shape.
 let g:undotree_TreeNodeShape = 'o'
 " split window location, could also be botright,
 let g:undotree_WindowLayout = 'botright'
-nmap <F10> :UndotreeToggle<CR>
+nmap <F4> :UndotreeToggle<CR>
 
 " >>>> easy motion <<<<
 "let g:EasyMotion_leader_key='\'
@@ -135,47 +68,9 @@ nmap <F10> :UndotreeToggle<CR>
 
 " >>>> nerd-tree <<<<
 let NERDTreeChDirMode=2
+let NERDTreeShowHidden=1
 nmap <F3> :NERDTreeToggle %:p:h<CR>
 
-" >>>> YouCompleteMe <<<<
-"let g:ycm_allow_changing_updatetime = 0
-
-" >>>> tagbar <<<<
-"let g:tagbar_width = 30
-"autocmd Filetype c,cpp,verilog nnoremap <F5> :TagbarToggle<CR>
-
-" >>>> ctrlspace <<<<
-"let g:ctrlspace_default_mapping_key = "<tab>"
-"let g:ctrlspace_unicode_font = 1
-
-" >>>> gtags-cscope <<<<
-"set cscopequickfix=s-,c-,d-,i-,t-,e-
-"set cscopetag
-"let g:GtagsCscope_Auto_Map = 1
-"if g:GtagsCscope_Auto_Map == 0
-  ""nnoremap <C-\>a :silent !gtags<CR>:cs add GTAGS<CR>
-  ""set csprg=$VIM\glo631wb\bin\GTAGS-cscope
-  "nnoremap <leader>gg :execute 'cscope find g '.expand('<cword>')<CR>
-  "nnoremap <leader>gs :execute 'cscope find s '.expand('<cword>')<CR>
-  "nnoremap <leader>gc :execute 'cscope find c '.expand('<cword>')<CR>
-  "nnoremap <leader>gt :execute 'cscope find t '.expand('<cword>')<CR>
-  "nnoremap <leader>gf :execute 'cscope find f '.expand('<cword>')<CR>
-  "nnoremap <leader>gi :execute 'cscope find i '.expand('<cword>')<CR>
-  "vnoremap <leader>gg <ESC>:execute 'cscope find g '.GetVisualSelection()<CR>
-  "vnoremap <leader>gs <ESC>:execute 'cscope find s '.GetVisualSelection()<CR>
-  "vnoremap <leader>gc <ESC>:execute 'cscope find c '.GetVisualSelection()<CR>
-  "vnoremap <leader>gt <ESC>:execute 'cscope find t '.GetVisualSelection()<CR>
-  "vnoremap <leader>gf <ESC>:execute 'cscope find f '.GetVisualSelection()<CR>
-  "vnoremap <leader>gi <ESC>:execute 'cscope find i '.GetVisualSelection()<CR>
-  "function! GetVisualSelection()
-    "let [s:lnum1, s:col1] = getpos("'<")[1:2]
-    "let [s:lnum2, s:col2] = getpos("'>")[1:2]
-    "let s:lines = getline(s:lnum1, s:lnum2)
-    "let s:lines[-1] = s:lines[-1][: s:col2 - (&selection == 'inclusive' ? 1 : 2)]
-    "let s:lines[0] = s:lines[0][s:col1 - 1:]
-    "return join(s:lines, ' ')
-  "endfunction
-"endif
 
 
 
@@ -224,7 +119,7 @@ nnoremap Y y$
 " >>>> file setting <<<<
 set autoread			" auto read when file is changed from outside
 " auto reload vimrc when editing it
-autocmd! BufWritePost _vimrc source D:\Vim\_vimrc
+"autocmd! BufWritePost _vimrc source D:\Vim\_vimrc
 
 " >>>> Buffer setting <<<<
 " cd to current working directory
@@ -285,7 +180,7 @@ set ignorecase
 set smartcase
 "nmap <silent> <M-n> :silent :nohlsearch<CR>
 let hlstate=0
-nnoremap <M-n> :silent :if (hlstate == 0) \| nohlsearch \| else \| set hlsearch \| endif \| let hlstate=1-hlstate<cr>
+nnoremap <leader>h :silent :if (hlstate == 0) \| nohlsearch \| else \| set hlsearch \| endif \| let hlstate=1-hlstate<cr>
 
 " >>>> scroll setting <<<<
 set sidescroll=1
