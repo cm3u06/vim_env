@@ -1,7 +1,7 @@
 set nocompatible              " be iMproved, required
 filetype off                  " required
 
-
+set encoding=utf-8
 "================================================================================
 " bundle setup
 "================================================================================
@@ -61,7 +61,7 @@ endfunc
 let g:undotree_TreeNodeShape = 'o'
 " split window location, could also be botright,
 let g:undotree_WindowLayout = 'botright'
-nmap <F4> :UndotreeToggle<CR>
+nmap <F5> :UndotreeToggle<CR>
 
 " >>>> easy motion <<<<
 "let g:EasyMotion_leader_key='\'
@@ -207,6 +207,23 @@ nnoremap <M-F12> :set guioptions+=b<CR>:set scrollopt+=hor<CR>:vsp<CR>:set scrol
 " >>>> Tags setting <<<<
 ""nnoremap tn :tn<CR>
 ""nnoremap tp :tp<CR>
+
+" >>>> FZF <<<<
+nnoremap <F4> :FZF<CR>
+"let g:fzf_action = {
+"			\ 'ctrl-t': 'tab split',
+"			\ 'ctrl-x': 'split',
+"			\ 'ctrl-v': 'vsplit' }
+"let g:fzf_history_dir=1
+
+
+" >>>> leaderf <<<<
+let g:Lf_UseVersionControlTool=0
+let g:Lf_WildIgnore = {
+			\ 'dir': ['.svn','.git','.hg'],
+			\ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+			\}
+let g:Lf_MaxCount = 100000
 
 " >>>> Special functions <<<<
 " hex <-> decimal
