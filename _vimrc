@@ -89,6 +89,24 @@ let g:UltiSnipsListSnippets           =    "<c-tab>"
 let g:UltiSnipsJumpForwardTrigger     =    "<tab>"
 let g:UltiSnipsJumpBackwardTrigger    =    "<s-tab>"
 
+
+" >>>> FZF <<<<
+nnoremap <F4> :FZF<CR>
+"let g:fzf_action = {
+"			\ 'ctrl-t': 'tab split',
+"			\ 'ctrl-x': 'split',
+"			\ 'ctrl-v': 'vsplit' }
+"let g:fzf_history_dir=1
+
+
+" >>>> leaderf <<<<
+let g:Lf_UseVersionControlTool=0
+let g:Lf_WildIgnore = {
+			\ 'dir': ['.svn','.git','.hg'],
+			\ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
+			\}
+let g:Lf_MaxCount = 100000
+
 "================================================================================
 " Environment setup
 "================================================================================
@@ -207,23 +225,6 @@ nnoremap <M-F12> :set guioptions+=b<CR>:set scrollopt+=hor<CR>:vsp<CR>:set scrol
 " >>>> Tags setting <<<<
 ""nnoremap tn :tn<CR>
 ""nnoremap tp :tp<CR>
-
-" >>>> FZF <<<<
-nnoremap <F4> :FZF<CR>
-"let g:fzf_action = {
-"			\ 'ctrl-t': 'tab split',
-"			\ 'ctrl-x': 'split',
-"			\ 'ctrl-v': 'vsplit' }
-"let g:fzf_history_dir=1
-
-
-" >>>> leaderf <<<<
-let g:Lf_UseVersionControlTool=0
-let g:Lf_WildIgnore = {
-			\ 'dir': ['.svn','.git','.hg'],
-			\ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
-			\}
-let g:Lf_MaxCount = 100000
 
 " >>>> Special functions <<<<
 " hex <-> decimal
