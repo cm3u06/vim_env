@@ -6,10 +6,18 @@ filetype off                  " required
 " bundle setup
 "================================================================================
 
+"let did_plugin_ultisnips=1
+set rtp+=$HOME/.vim,$HOME/.vim/after
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
-"set pythonthreedll=$HOME/AppData/Local/Programs/Python/Python39/python39.dll
 
+
+filetype plugin indent on
+
+
+if has('win32unix') || has('win32')
+	set pythonthreedll=$HOME/python-3.9.9-embed-win32/python39.dll
+endif
  
 
 "================================================================================
@@ -140,7 +148,7 @@ set nobackup
 
 " >>>> View setting <<<<
 set number
-set guifont=Consolas:h10
+set guifont=Consolas:h14
 set nowrap
 autocmd GUIEnter * simalt ~x
 "set cursorline
