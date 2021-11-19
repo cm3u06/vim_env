@@ -24,6 +24,7 @@ https://github.com/michaeljsmith/vim-indent-object.git
 https://github.com/tpope/vim-fugitive.git
 #https://github.com/junegunn/fzf.git
 https://github.com/Yggdroot/LeaderF.git
+https://github.com/sillybun/vim-repl.git
 )
 
 #echo ${#url_list[@]}

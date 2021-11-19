@@ -16,7 +16,9 @@ filetype plugin indent on
 
 
 if has('win32unix') || has('win32')
-	set pythonthreedll=$HOME/python-3.9.9-embed-win32/python39.dll
+	set pythonthreedll=$HOME/Python/Python39-32/python39.dll
+	"set pythonthreehome=$HOME/Python/Python39-32
+	let $PATH.=';' . $HOME . '/Python/Python39-32' . ';' . $HOME . '/Python/Python39-32/Scripts'
 endif
  
 
@@ -28,7 +30,8 @@ endif
 let mapleader = ","
 
 " >>>> EasyGrep <<<<
-"let EasyGrepSearchCurrentBufferDir = 0
+let EasyGrepRecursive = 1
+let EasyGrepSearchCurrentBufferDir = 0
 
 " >>>> undo tree <<<<
 fun! CreateDotDir()
@@ -107,6 +110,35 @@ let g:Lf_WildIgnore = {
 			\}
 let g:Lf_MaxCount = 100000
 
+
+" >>>> REPL <<<<
+let g:repl_program = {
+            \   'python': 'ipython',
+            \   'python-debug' : 'ipdb3',
+            \   'default': 'cmd.exe',
+            \   'vim': 'vim -e',
+            \   }
+"let g:repl_predefine_python = {
+"            \   'numpy': 'import numpy as np',
+"            \   'matplotlib': 'from matplotlib import pyplot as plt'
+"            \   }
+"let g:repl_python_pre_launch_command = 'C:\Users\tw51112\Python\Python39-32\venv_vim\Scripts\activate'
+let g:repl_cursor_down = 1
+let g:repl_python_automerge = 1
+let g:repl_ipython_version = '7'
+let g:repl_output_copy_to_register = "t"
+nnoremap <leader>r :REPLToggle<Cr>
+nnoremap <leader>e :REPLSendSession<Cr>
+autocmd Filetype python nnoremap <C-F12> <Esc>:REPLDebugStopAtCurrentLine<Cr>
+autocmd Filetype python nnoremap <C-F10> <Esc>:REPLPDBN<Cr>
+autocmd Filetype python nnoremap <C-F11> <Esc>:REPLPDBS<Cr>
+let g:repl_position = 3
+
+
+" >>>> jedi <<<<
+"let g:jedi#environment_path = "C:\Users\tw51112\Python\Python36-32"
+ 
+
 "================================================================================
 " Environment setup
 "================================================================================
@@ -128,6 +160,10 @@ noremap <c-h> <c-w>h
 noremap <c-j> <c-w>j
 noremap <c-k> <c-w>k
 noremap <c-l> <c-w>l
+tnoremap <c-h> <c-w>h
+tnoremap <c-j> <c-w>j
+tnoremap <c-k> <c-w>k
+tnoremap <c-l> <c-w>l
 
 " ` is more useful than ' but less accessible.
 nnoremap ' `
