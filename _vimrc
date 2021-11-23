@@ -16,11 +16,10 @@ filetype plugin indent on
 
 
 if has('win32unix') || has('win32')
-	set pythonthreedll=$HOME/Python/Python39-32/python39.dll
+	set pythonthreedll=$HOME/Python/Python36-32/python36.dll
 	"set pythonthreehome=$HOME/Python/Python39-32
-	let $PATH.=';' . $HOME . '/Python/Python39-32' . ';' . $HOME . '/Python/Python39-32/Scripts'
+	"let $PATH.=';' . $HOME . '/Python/Python39-32/venv_vim' . ';' . $HOME . '/Python/Python39-32/venv_vim/Scripts'
 endif
- 
 
 "================================================================================
 " Plugin setup
@@ -43,10 +42,10 @@ endfunc
 
 if !exists("undotree_conf")
 	let undotree_conf = 1
-	"autocmd FileType c,cpp,systemc,verilog call ReadUndo()
-	"autocmd FileType c,cpp,systemc,verilog call WriteUndo()
-	autocmd! BufReadPost *.h,*.c,*.cpp,*.v,*.sv,*.py call ReadUndo()
-	autocmd! BufWritePre *.h,*.c,*.cpp,*.v,*.sv,*.py call WriteUndo()
+	augroup UNDO
+		autocmd! BufReadPost *.h,*.c,*.cpp,*.v,*.sv,*.py call ReadUndo()
+		autocmd! BufWritePre *.h,*.c,*.cpp,*.v,*.sv,*.py call WriteUndo()
+	augroup END
 endif
 func! ReadUndo()
 	let undo_file = expand('~'). '/.undo_history/' . substitute(expand('%:p'),'/','_','g') . '.undo'
@@ -78,7 +77,7 @@ nmap <F5> :UndotreeToggle<CR>
 "imap s' <Plug>Isurround'
 
 " >>>> nerd-tree <<<<
-let NERDTreeChDirMode=2
+let NERDTreeChDirMode=1
 let NERDTreeShowHidden=1
 nmap <F3> :NERDTreeToggle %:p:h<CR>
 
@@ -113,16 +112,16 @@ let g:Lf_MaxCount = 100000
 
 " >>>> REPL <<<<
 let g:repl_program = {
-            \   'python': 'ipython',
-            \   'python-debug' : 'ipdb3',
-            \   'default': 'cmd.exe',
-            \   'vim': 'vim -e',
-            \   }
+           \   'python': 'ipython',
+           \   'python-debug' : 'ipdb3',
+           \   'default': 'cmd.exe',
+           \   'vim': 'vim -e',
+           \   }
 "let g:repl_predefine_python = {
 "            \   'numpy': 'import numpy as np',
 "            \   'matplotlib': 'from matplotlib import pyplot as plt'
 "            \   }
-"let g:repl_python_pre_launch_command = 'C:\Users\tw51112\Python\Python39-32\venv_vim\Scripts\activate'
+"let g:repl_python_pre_launch_command = 'C:\Users\tw51112\PyDev\finlab01\.venv\Scripts\activate'
 let g:repl_cursor_down = 1
 let g:repl_python_automerge = 1
 let g:repl_ipython_version = '7'
@@ -136,8 +135,28 @@ let g:repl_position = 3
 
 
 " >>>> jedi <<<<
-"let g:jedi#environment_path = "C:\Users\tw51112\Python\Python36-32"
+"let g:jedi#environment_path = 'C:\Users\tw51112\PyDev\finlab01\.venv'
  
+
+" >>>> reply <<<<
+" let g:reply_repls = {
+" \ 'python' : [
+" \ { -> reply#repl#base('ipython', {
+" \   'prompt_start' : '^In \[\d\+]: ',
+" \   'prompt_continue' : '^\s\s\s\.\.\.: ',
+" \ }) }
+" \ ]
+" \ }
+" 
+" 
+" let g:reply_termwin_max_height=10
+" let g:reply_termwin_max_width=40
+" nnoremap <leader>w :ReplSend<cr>
+" tnoremap <leader>w :ReplSend<cr>
+" vnoremap <leader>w :ReplSend<cr>
+" nnoremap <leader>r :ReplStop<cr>
+" tnoremap <leader>r :ReplStop<cr>
+" vnoremap <leader>r :ReplStop<cr>
 
 "================================================================================
 " Environment setup
@@ -328,3 +347,80 @@ noremap <silent><C-C> :<C-U>call CalculateCursor(v:count1, "/")<CR>
 vnoremap <silent><C-C> :<C-U>'<,'>call CalculateCursor(v:count1, "/")<CR>:noh<CR>gv
 
 
+
+
+""""""""""""""""""""""""""""""""""""""
+" Python
+""""""""""""""""""""""""""""""""""""""
+
+command! -nargs=1 -bang -complete=file Pyvenv call s:set_python_venv(<q-args>,0)
+augroup SET_PYTHON_ENV
+	au!
+	au  FileType python call s:set_python_venv('',1)
+augroup END
+function! s:set_python_venv(venv_path,mode=0) abort
+
+	if has('win32')
+		let l:path_sep = '\'
+		let l:venv_bin_dir = 'Scripts'
+	elseif has('unix')
+		let l:path_sep = '/'
+		let l:venv_bin_dir = 'bin'
+	else
+		echom "Do not set python venv bin."
+		return
+	endif
+
+	if a:mode == 0
+		"echo a:venv_path
+		let l:venv_path = expand(a:venv_path)
+	else
+		let l:venv_path = expand(input("Enter venv path (q: quit): ", '~', "dir"))
+	endif
+	let l:venv_path = substitute(l:venv_path, '\(\\\|\/\)\s*$','','g')
+	let l:venv_bin_path = l:venv_path . l:path_sep . l:venv_bin_dir
+	while l:venv_bin_path == "" || !( l:venv_path ==? 'q' || 
+				\ executable(l:venv_bin_path . l:path_sep . 'python') ||
+				\ executable(l:venv_path . l:path_sep . 'python')
+				\ )
+		redraw
+		echom l:venv_path . ' is not a valid Python venv path !'
+		let l:venv_path = substitute(expand(input("Enter venv path again (q: quit): ", '~', "dir")), '\(\\\|\/\)\s*$','','g')
+		if executable(l:venv_path . l:path_sep . 'python')
+			let l:venv_bin_path = l:venv_path
+		else
+			let l:venv_bin_path = l:venv_path . l:path_sep . l:venv_bin_dir
+		endif
+	endwhile
+
+	"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+	if l:venv_path ==? 'q'
+		echohl ErrorMsg 
+		echom 'Use \":Pyvenv <path to venv>\" to activate Python environment.'
+		echohl None
+		return
+	else
+		echom 'Python venv : ' . l:venv_path
+	endif
+
+	if filereadable(l:venv_bin_path . l:path_sep . 'activate')
+		let l:venv_activate_path = l:venv_bin_path . l:path_sep . 'activate'
+	else
+		let l:venv_activate_path = ''
+	endif
+
+	"silent execute "!" . l:venv_path . '/Scripts/activate'
+
+	" jedi-vim venv
+	let b:jedi_environment_path = l:venv_path
+
+	" vim-repl venv
+	let g:repl_python_pre_launch_command = l:venv_activate_path
+	let $PATH = l:venv_path . ';' . l:venv_bin_path . ';' . $PATH
+
+	" reply venv
+	"let b:reply_repl_ipython_executable = l:venv_path . '/Scripts/ipython'
+	"let b:reply_repl_ipython_command_options = ''
+	"let b:reply__enable_debug=1
+
+endfunction
