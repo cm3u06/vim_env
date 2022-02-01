@@ -276,6 +276,7 @@ set sidescrolloff=3
 set diffopt=filler,vertical,iwhite,context:0
 nnoremap <F12> :vert sbnext<CR>:windo diffthis<CR>
 nnoremap <M-F12> :set guioptions+=b<CR>:set scrollopt+=hor<CR>:vsp<CR>:set scrollbind<CR><C-L>:bn<CR>:set scrollbind<CR><C-H>
+nnoremap <leader>d :windo diffthis<CR>
 
 " >>>> Tags setting <<<<
 ""nnoremap tn :tn<CR>
@@ -424,3 +425,16 @@ function! s:set_python_venv(venv_path,mode=0) abort
 	"let b:reply__enable_debug=1
 
 endfunction
+
+
+
+""""""""""""""""""""""""""""""""""""""
+" Verilog code style
+""""""""""""""""""""""""""""""""""""""
+augroup VERILOG_PLUG_PORT
+  autocmd!
+  autocmd BufRead,BufNewFile *.v,*.sv       nnoremap  <leader>ap     vib:EasyAlign/\(\[\s*\)\@<!\<\w\+\>\(\s*]\)\@!/ikl0r2<dlall<CR>vib:EasyAlign/\[.\{-}\]/l4r4><CR>vib:EasyAlign-/\<\w\+\>/l4r1dl<CR>
+  autocmd BufRead,BufNewFile *.v,*.sv       nnoremap  <leader>ai     vib:EasyAlign/\./inalr0<CR>vib:EasyAlign/^.\{-}\zs(/all4r1<CR>vib:EasyAlign-/)/all1r1<CR>
+  autocmd BufRead,BufNewFile *.v,*.sv       nnoremap  <leader>ip     vib:s/\S\+/.& (&)/<CR>vib:EasyAlign/^.\{-}\zs(/all4r1<CR>vib:EasyAlign-/)/all1r1<CR>
+augroup END
+
