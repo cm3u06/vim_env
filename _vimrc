@@ -86,6 +86,7 @@ nmap <F3> :NERDTreeToggle %:p:h<CR>
 
 " >>>> ultisnips <<<<
 let g:UltiSnipsUsePythonVersion = 3
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "my_snippets"]
 let g:UltiSnipsExpandTrigger          =    "<tab>"
 let g:UltiSnipsListSnippets           =    "<c-tab>"
 let g:UltiSnipsJumpForwardTrigger     =    "<tab>"
@@ -276,7 +277,8 @@ set sidescrolloff=3
 set diffopt=filler,vertical,iwhite,context:0
 nnoremap <F12> :vert sbnext<CR>:windo diffthis<CR>
 nnoremap <M-F12> :set guioptions+=b<CR>:set scrollopt+=hor<CR>:vsp<CR>:set scrollbind<CR><C-L>:bn<CR>:set scrollbind<CR><C-H>
-nnoremap <leader>d :windo diffthis<CR>
+let df_st=0
+nnoremap <leader>d :silent :if (df_st == 0) \| execute 'windo diffthis' \| else \| execute 'windo diffoff' \| endif \| let df_st=1-df_st<cr>
 
 " >>>> Tags setting <<<<
 ""nnoremap tn :tn<CR>
@@ -433,7 +435,7 @@ endfunction
 """"""""""""""""""""""""""""""""""""""
 augroup VERILOG_PLUG_PORT
   autocmd!
-  autocmd BufRead,BufNewFile *.v,*.sv       nnoremap  <leader>ap     vib:EasyAlign/\(\[\s*\)\@<!\<\w\+\>\(\s*]\)\@!/ikl0r2<dlall<CR>vib:EasyAlign/\[.\{-}\]/l4r4><CR>vib:EasyAlign-/\<\w\+\>/l4r1dl<CR>
+  autocmd BufRead,BufNewFile *.v,*.sv       nnoremap  <leader>ap     vib:EasyAlign/\(\[[^]]*\)\@<!\<\w\+\>\([^[]*\]\)\@!/ikl0r2<dlall<CR>vib:EasyAlign/\[.\{-}\]/l4r4><CR>vib:EasyAlign-/\<\w\+\>/l4r1dl<CR>
   autocmd BufRead,BufNewFile *.v,*.sv       nnoremap  <leader>ai     vib:EasyAlign/\./inalr0<CR>vib:EasyAlign/^.\{-}\zs(/all4r1<CR>vib:EasyAlign-/)/all1r1<CR>
   autocmd BufRead,BufNewFile *.v,*.sv       nnoremap  <leader>ip     vib:s/\S\+/.& (&)/<CR>vib:EasyAlign/^.\{-}\zs(/all4r1<CR>vib:EasyAlign-/)/all1r1<CR>
 augroup END
