@@ -1,0 +1,52 @@
+priority -50
+
+extends verilog
+
+# We want to overwrite everything in parent ft.
+priority -49
+###########################################################################
+#			    Global functions 						  #
+###########################################################################
+
+snippet al* "comb always"
+always @(*)
+begin
+	$0
+end
+endsnippet
+
+
+snippet al@ "linewise edge always"
+always @(posedge ${1:clk}${2: or negedge ${3:rst_n}})
+	if (!$3) $4
+endsnippet
+
+snippet al@b "blockwise edge always"
+always @(posedge ${1:clk}${2: or negedge ${3:rst_n}})
+begin
+	if (!$3) $4
+end
+endsnippet
+
+
+
+snippet b "blockwise"
+begin
+	${VISUAL}$0
+end
+endsnippet
+
+
+
+snippet par "parameter "
+parameter 
+endsnippet
+
+
+
+
+snippet ifd "`ifdef ... `endif"
+`ifdef $1
+	${VISUAL}$0
+`endif
+endsnippet
