@@ -103,12 +103,56 @@ nnoremap <F4> :FZF<CR>
 
 
 " >>>> leaderf <<<<
+"augroup CHANGE_WORKING_DIR
+"autocmd!
+"autocmd BufReadPost,BufEnter *.cpp,*.hpp,*.c,*.h  cd %:p:h
+"augroup END
+let g:Lf_WorkingDirectoryMode = 'f'
 let g:Lf_UseVersionControlTool=0
 let g:Lf_WildIgnore = {
 			\ 'dir': ['.svn','.git','.hg'],
 			\ 'file': ['*.sw?','~$*','*.bak','*.exe','*.o','*.so','*.py[co]']
 			\}
 let g:Lf_MaxCount = 100000
+
+let $PATH .= ';' .$HOME . '\glo668wb\bin;' . $HOME . '\ripgrep-13.0.0-x86_64-pc-windows-msvc'
+let g:Lf_GtagsAutoGenerate = 0
+let g:Lf_GtagsGutentags=0
+let g:Lf_DefaultExternalTool='rg'
+
+nmap <unique> <leader>frp <Plug>LeaderfRgPrompt
+nmap <unique> <Leader>frr <Plug>LeaderfRgCwordLiteralBoundary<CR>
+vmap <unique> <Leader>frr <Plug>LeaderfRgVisualLiteralNoBoundary<CR>
+
+nmap <unique> <leader>fgt :call <SID>LeaderfGtagsUpdate()<CR>:cd -<CR>
+nmap <unique> <leader>fgc :Leaderf gtags --by-context --auto-jump<CR>
+"nmap <unique> <leader>fgd <Plug>LeaderfGtagsDefinition<CR>
+"nmap <unique> <leader>fgr <Plug>LeaderfGtagsReference<CR>
+"nmap <unique> <leader>fgs <Plug>LeaderfGtagsSymbol<CR>
+"nmap <unique> <leader>fgg <Plug>LeaderfGtagsGrep<CR>
+
+vmap <unique> <leader>fgc :Leaderf gtags --by-context --auto-jump<CR>
+"vmap <unique> <leader>fgd <Plug>LeaderfGtagsDefinition<CR>
+"vmap <unique> <leader>fgr <Plug>LeaderfGtagsReference<CR>
+"vmap <unique> <leader>fgs <Plug>LeaderfGtagsSymbol<CR>
+"vmap <unique> <leader>fgg <Plug>LeaderfGtagsGrep<CR>
+
+"noremap <leader>fgo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+"noremap <leader>fgn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+"noremap <leader>fgp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
+
+func! s:LeaderfGtagsUpdate() abort
+  cd %:p:h
+  sleep 3
+  Leaderf gtags --update
+endfunc
+
+" >>>> Gutentags <<<<
+"let g:gutentags_project_root=['.root']
+"let g:gutentags_cache_dir=expand(g:Lf_CacheDirectory.'/.LfCache/gtags')
+"let g:gutentags_gtags_executable=$HOME . '\glo668wb\bin\gtags.exe'
+"let g:gutentags_gtags_cscope_executable=$HOME . '\glo668wb\bin\gtags-cscope.exe'
+"let g:gutentags_gtags_dbpath=''
 
 
 " >>>> REPL <<<<
@@ -158,6 +202,10 @@ let g:repl_position = 3
 " nnoremap <leader>r :ReplStop<cr>
 " tnoremap <leader>r :ReplStop<cr>
 " vnoremap <leader>r :ReplStop<cr>
+
+
+" >>>> coc.nvim <<<<
+let $PATH .= ';' .$HOME . '\clangd_13.0.0\bin'
 
 "================================================================================
 " Environment setup
@@ -226,7 +274,7 @@ set guifont=Consolas:h14
 set nowrap
 autocmd GUIEnter * simalt ~x
 "set cursorline
-colorscheme torte
+colorscheme molokai
 syntax on
 
 " >>>> Command-line setting <<<<

@@ -22,9 +22,11 @@ https://github.com/honza/vim-snippets.git
 https://github.com/kana/vim-textobj-user.git
 https://github.com/michaeljsmith/vim-indent-object.git
 https://github.com/tpope/vim-fugitive.git
-#https://github.com/junegunn/fzf.git
+https://github.com/junegunn/fzf.git
 https://github.com/Yggdroot/LeaderF.git
 https://github.com/sillybun/vim-repl.git
+#https://github.com/ludovicchabant/vim-gutentags.git
+https://github.com/tomasr/molokai.git
 )
 
 #echo ${#url_list[@]}
@@ -42,8 +44,26 @@ if [ -d ~/.vim/bundle/${plug_name} ]; then
 	cd -
 else
 	echo '[>>>>>>>>>>>>>>>>>>> Download plugin: ' ${plug_name}
-	git clone ${url} ~/.vim/bundle/${plug_name}
+	cd ~/.vim/bundle
+	git clone ${url}
+	cd -
+fi
+
+done
+
+
+# coc.nvim
+plug_name='coc.nvim'
+if [ -d ~/.vim/bundle/${plug_name} ]; then
+	echo '[>>>>>>>>>>>>>>>>>>> Update   plugin: ' ${plug_name}
+	cd ~/.vim/bundle/${plug_name}
+	git pull origin master
+	cd -
+else
+	echo '[>>>>>>>>>>>>>>>>>>> Download plugin: ' ${plug_name}
+	cd ~/.vim/bundle/
+	git clone --branch release https://github.com/neoclide/coc.nvim.git --depth=1
+	cd -
 fi
 
 
-done
