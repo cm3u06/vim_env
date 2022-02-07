@@ -71,4 +71,4 @@ fi
 #git
 #fzf -> fzf
 #leaderf -> rg, gtags
-#coc.nvim -> clangd
+#coc.nvim -> Node.js, clangd(c/c++)
