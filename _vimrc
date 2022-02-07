@@ -115,7 +115,7 @@ let g:Lf_WildIgnore = {
 			\}
 let g:Lf_MaxCount = 100000
 
-let $PATH .= ';' .$HOME . '\glo668wb\bin;' . $HOME . '\ripgrep-13.0.0-x86_64-pc-windows-msvc'
+let $PATH .= ';' .$HOME . '\tools\glo668wb\bin;' . $HOME . '\tools\ripgrep-13.0.0-x86_64-pc-windows-msvc'
 let g:Lf_GtagsAutoGenerate = 0
 let g:Lf_GtagsGutentags=0
 let g:Lf_DefaultExternalTool='rg'
@@ -124,7 +124,7 @@ nmap <unique> <leader>frp <Plug>LeaderfRgPrompt
 nmap <unique> <Leader>frr <Plug>LeaderfRgCwordLiteralBoundary<CR>
 vmap <unique> <Leader>frr <Plug>LeaderfRgVisualLiteralNoBoundary<CR>
 
-nmap <unique> <leader>fgt :call <SID>LeaderfGtagsUpdate()<CR>:cd -<CR>
+nmap <unique> <leader>fgt :call <SID>LeaderfGtagsUpdate()<CR>
 nmap <unique> <leader>fgc :Leaderf gtags --by-context --auto-jump<CR>
 "nmap <unique> <leader>fgd <Plug>LeaderfGtagsDefinition<CR>
 "nmap <unique> <leader>fgr <Plug>LeaderfGtagsReference<CR>
@@ -143,8 +143,9 @@ vmap <unique> <leader>fgc :Leaderf gtags --by-context --auto-jump<CR>
 
 func! s:LeaderfGtagsUpdate() abort
   cd %:p:h
-  sleep 3
   Leaderf gtags --update
+  sleep 3
+  cd -
 endfunc
 
 " >>>> Gutentags <<<<
@@ -205,7 +206,7 @@ let g:repl_position = 3
 
 
 " >>>> coc.nvim <<<<
-let $PATH .= ';' .$HOME . '\clangd_13.0.0\bin'
+let $PATH .= ';' .$HOME . '\tools\clangd_13.0.0\bin'
 
 "================================================================================
 " Environment setup

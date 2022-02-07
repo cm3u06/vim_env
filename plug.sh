@@ -67,3 +67,8 @@ else
 fi
 
 
+#python36-32bit
+#git
+#fzf -> fzf
+#leaderf -> rg, gtags
+#coc.nvim -> clangd
